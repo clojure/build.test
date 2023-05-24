@@ -5,5 +5,3 @@ on: [push]
 jobs:
   call-test:
     uses: clojure/build.ci/.github/workflows/test.yml@master
-      with:
-        java_versions: ["11" "17"]
