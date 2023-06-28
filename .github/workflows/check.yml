@@ -27,4 +27,4 @@ jobs:
       with:
         cli: latest
     - name: Build with Maven
-      run: clj --version
+      run: clojure --version
