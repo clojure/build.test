@@ -1,4 +1,4 @@
-name: Snapshot on demand
+name: NEW Snapshot on demand
 
 on: [workflow_dispatch]
 

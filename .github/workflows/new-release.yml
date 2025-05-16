@@ -1,4 +1,4 @@
-name: Release on demand
+name: NEW Release on demand
 
 on:
   workflow_dispatch:
