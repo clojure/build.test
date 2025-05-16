@@ -36,7 +36,6 @@ jobs:
         gpg-private-key: ${{ secrets.CENTRAL_GPG_SECRET_KEY }}
         gpg-passphrase: GPG_PASSPHRASE
     - name: Publish to Maven OSS Server
-      if: ${{ inputs.centralDeployServer == 'oss' }}
       run: mvn -ntp -B -Psign -Dmaven.test.skip=true deploy
       env:
         MAVEN_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
