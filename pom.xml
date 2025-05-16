@@ -15,28 +15,163 @@
     </developer>
   </developers>
 
-  <parent>
-    <groupId>org.clojure</groupId>
-    <artifactId>pom.contrib</artifactId>
-    <version>1.2.0</version>
-  </parent>
-
   <scm>
     <connection>scm:git:git@github.com:clojure/buildtest</connection>
     <developerConnection>scm:git:git@github.com:clojure/buildtest</developerConnection>
     <url>git@github.com:clojure/buildtest.git</url>
     <tag>HEAD</tag>
   </scm>
+  
+  <!--
+  <parent>
+    <groupId>org.clojure</groupId>
+    <artifactId>pom.contrib</artifactId>
+    <version>1.2.0</version>
+  </parent>
+  -->
 
+  <!-- parent pom stuff -->
+
+  <properties>
+    <!-- Builds will use this release version of Clojure, may be
+         overridden in projects or at the command line. -->
+    <clojure.version>1.9.0</clojure.version>
+    <!-- By default, do not enable *warn-on-reflection*, may be
+         overridden in projects at the command line. -->
+    <clojure.warnOnReflection>false</clojure.warnOnReflection>
+
+    <clojure.source.dir>src/main/clojure</clojure.source.dir>
+    <clojure.testSource.dir>src/test/clojure</clojure.testSource.dir>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <licenses>
+    <license>
+      <name>Eclipse Public License 1.0</name>
+      <url>https://opensource.org/licenses/eclipse-1.0.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>clojure</artifactId>
+      <version>${clojure.version}</version>
+    </dependency>
+  </dependencies>
+  
   <distributionManagement>
     <repository>
       <id>central</id>
       <url>https://central.sonatype.com</url>
     </repository>
   </distributionManagement>
-
+  
   <build>
     <plugins>
+      <plugin>
+        <!-- Add Clojure sources to the project's source directories -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-clojure-source-dirs</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${clojure.source.dir}</source>
+              </sources>
+              <resources>
+                <resource>
+                  <directory>${clojure.source.dir}</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-clojure-test-source-dirs</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${clojure.testSource.dir}</source>
+              </sources>
+              <resources>
+                <resource>
+                  <directory>${clojure.testSource.dir}</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+      <!-- By default, compile everything as a sanity check, but do
+           not include any AOT-compiled .class files in the
+           JAR. Projects may override as needed. -->
+        <groupId>com.theoryinpractise</groupId>
+        <artifactId>clojure-maven-plugin</artifactId>
+        <version>1.7.1</version>
+        <extensions>true</extensions>
+        <configuration>
+          <warnOnReflection>${clojure.warnOnReflection}</warnOnReflection>
+          <temporaryOutputDirectory>true</temporaryOutputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>clojure-compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>clojure-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <!-- Clojure targets Java 1.8+ -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+          <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <!-- do not push pre-deployment SCM changes to upstream repo
+	           with maven release plugin; if the release/deploy fails,
+             we're stuck with manually fixing up version numbers, git
+             history, etc -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <pushChanges>false</pushChanges>
+          <localCheckout>true</localCheckout>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>      
+      
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
@@ -49,6 +184,31 @@
       </plugin>
     </plugins>
   </build>
+  
+  <profiles>
+    <profile>
+      <id>sign</id>
+      <build>
+        <plugins>
+          <!-- sign artifacts for deployment -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
 
