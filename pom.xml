@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.clojure</groupId>
   <artifactId>buildtest</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2-SNAPSHOT</version>
   <name>buildtest</name>
   <description>Dummy project for build and deployment testing</description>
   <url>https://github.com/clojure/build.test</url>
@@ -19,7 +19,7 @@
     <connection>scm:git:git@github.com:clojure/buildtest</connection>
     <developerConnection>scm:git:git@github.com:clojure/buildtest</developerConnection>
     <url>git@github.com:clojure/buildtest.git</url>
-    <tag>v0.3.1</tag>
+    <tag>HEAD</tag>
   </scm>
   
   <!--
