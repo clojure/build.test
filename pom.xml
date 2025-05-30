@@ -65,6 +65,9 @@
     <repository>
       <id>central</id>
       <url>https://central.sonatype.com</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </distributionManagement>
   
