@@ -8,9 +8,11 @@
   <description>Dummy project for build and deployment testing</description>
   <url>https://github.com/clojure/build.test</url>
 
+  <!--
   <properties>
     <project.build.outputTimestamp>2026-01-01T00:00:00Z</project.build.outputTimestamp>
   </properties>
+  -->
 
   <developers>
     <developer>
@@ -29,7 +31,7 @@
   <parent>
     <groupId>org.clojure</groupId>
     <artifactId>pom.contrib</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.2</version>
   </parent>
 
 </project>
