@@ -9,7 +9,7 @@
   <url>https://github.com/clojure/build.test</url>
 
   <properties>
-    <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2026-07-02T15:25:24Z</project.build.outputTimestamp>
   </properties>
 
   <developers>
@@ -32,33 +32,5 @@
     <version>1.4.3</version>
   </parent>
   
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>io.github.git-commit-id</groupId>
-        <artifactId>git-commit-id-maven-plugin</artifactId>
-        <version>9.2.0</version>
-        <executions>
-          <execution>
-            <id>get-the-git-infos</id>
-            <goals>
-              <goal>revision</goal>
-            </goals>
-            <phase>initialize</phase>
-          </execution>
-        </executions>
-        <configuration>
-          <generateGitPropertiesFile>true</generateGitPropertiesFile>
-          <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-	  <commitIdGenerationMode>full</commitIdGenerationMode>
-	  <dateFormatTimeZone>UTC</dateFormatTimeZone>
-          <excludeProperties>
-           <excludeProperty>git.build.time</excludeProperty>
-          </excludeProperties>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>
 
